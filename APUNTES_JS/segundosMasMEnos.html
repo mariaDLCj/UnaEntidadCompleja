@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de segundos</title>
+    <style>
+        #contador {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        button {
+            font-size: 16px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Contador de Segundos</h1>
+
+    <div id="contador">0 segundos</div>
+
+    <button id="sumarBtn">Añadir 10 segundos</button>
+    <button id="restarBtn">Quitar 10 segundos</button>
+
+    <script>
+        let tiempo = 0;
+        let intervalo;
+
+        // Actualiza el contador en pantalla
+        function actualizarContador() {
+            document.getElementById('contador').textContent = `${tiempo} segundos`;
+        }
+
+        // Comienza el contador
+        function iniciarContador() {
+            if (intervalo) clearInterval(intervalo);  // Si ya existe un intervalo, lo limpiamos
+            intervalo = setInterval(() => {
+                tiempo++;  // Incrementa el contador cada segundo
+                actualizarContador();
+            }, 1000);
+        }
+
+        // Añadir 10 segundos
+        document.getElementById('sumarBtn').addEventListener('click', () => {
+            tiempo += 10;
+            actualizarContador();
+        });
+
+        // Restar 10 segundos
+        document.getElementById('restarBtn').addEventListener('click', () => {
+            if (tiempo >= 10) {
+                tiempo -= 10;
+                actualizarContador();
+            }
+        });
+
+        // Iniciar el contador cuando la página cargue
+        iniciarContador();
+    </script>
+
+</body>
+
+</html>

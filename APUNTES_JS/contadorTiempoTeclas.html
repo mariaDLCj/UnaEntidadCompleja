@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador hacia adelante hasta un evento</title>
+    <style>
+        #fechas {
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .contador {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        #fechaInput {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Contador hacia adelante hasta un evento</h1>
+    <p>Introduce la fecha y hora de tu evento en el formato dd-mm-aaaa hh:mm (por ejemplo, 30-01-2025 15:30):</p>
+
+    <input type="text" id="fechaInput" placeholder="dd-mm-aaaa hh:mm">
+    <button id="iniciarContador">Iniciar Contador</button>
+
+    <div id="fechas">
+        <div class="contador" id="tiempoRestante">00 días 00 horas 00 minutos 00 segundos</div>
+    </div>
+
+    <script>
+        let fechaEvento;
+
+        document.getElementById("iniciarContador").addEventListener("click", function() {
+            const fechaInput = document.getElementById("fechaInput").value;
+
+            // Dividir la fecha y la hora
+            const fechaHoraPartes = fechaInput.split(' ');
+            if (fechaHoraPartes.length !== 2) {
+                alert("Por favor, ingresa una fecha y hora válidas en el formato dd-mm-aaaa hh:mm.");
+                return;
+            }
+
+            const fechaParte = fechaHoraPartes[0];
+            const horaParte = fechaHoraPartes[1];
+
+            // Dividir la fecha en día, mes y año
+            const fechaPartes = fechaParte.split('-');
+            if (fechaPartes.length !== 3) {
+                alert("Por favor, ingresa una fecha válida en el formato dd-mm-aaaa.");
+                return;
+            }
+
+            const dia = parseInt(fechaPartes[0], 10);
+            const mes = parseInt(fechaPartes[1], 10) - 1; // Los meses en JavaScript van de 0 a 11
+            const anio = parseInt(fechaPartes[2], 10);
+
+            // Dividir la hora en horas y minutos
+            const horaMinutos = horaParte.split(':');
+            if (horaMinutos.length !== 2) {
+                alert("Por favor, ingresa una hora válida en el formato hh:mm.");
+                return;
+            }
+
+            const hora = parseInt(horaMinutos[0], 10);
+            const minutos = parseInt(horaMinutos[1], 10);
+
+            // Validar si los valores son correctos
+            if (isNaN(dia) || isNaN(mes) || isNaN(anio) || isNaN(hora) || isNaN(minutos) ||
+                dia < 1 || mes < 0 || mes > 11 || anio < 1000 || hora < 0 || hora > 23 || minutos < 0 || minutos > 59) {
+                alert("Por favor, ingresa una fecha y hora válidas.");
+                return;
+            }
+
+            // Crear el objeto Date con la fecha y hora ingresada
+            fechaEvento = new Date(anio, mes, dia, hora, minutos);
+
+            // Verificar si la fecha es válida
+            if (isNaN(fechaEvento.getTime())) {
+                alert("La fecha y hora ingresada no son válidas.");
+                return;
+            }
+
+            actualizarContador(); // Inicia el contador de inmediato
+            setInterval(actualizarContador, 1000); // Actualiza cada segundo
+        });
+
+        function actualizarContador() {
+            const ahora = new Date();
+            const tiempoRestante = fechaEvento - ahora;
+
+            // Si el evento ya ocurrió, muestra un mensaje
+            if (tiempoRestante <= 0) {
+                document.getElementById('tiempoRestante').textContent = "¡El evento ha ocurrido!";
+                return;
+            }
+
+            // Calcula días, horas, minutos y segundos restantes
+            const dias = Math.floor(tiempoRestante / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((tiempoRestante % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((tiempoRestante % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((tiempoRestante % (1000 * 60)) / 1000);
+
+            // Actualiza el contador en el HTML
+            document.getElementById('tiempoRestante').textContent = `${dias} días ${horas} horas ${minutos} minutos ${segundos} segundos`;
+        }
+    </script>
+
+</body>
+</html>

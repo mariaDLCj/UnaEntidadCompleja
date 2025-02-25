@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guardar Información del Usuario</title>
+</head>
+<body>
+    <h1>Información del Usuario</h1>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" placeholder="Introduce tu nombre"><br>
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" placeholder="Introduce tu edad"><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" placeholder="Introduce tu email"><br>
+    <button onclick="guardarUsuario()">Guardar Usuario</button>
+    <button onclick="cargarUsuario()">Cargar Usuario</button>
+    <button onclick="eliminarUsuario()">Eliminar Usuario</button>
+
+    <h2>Datos Guardados:</h2>
+    <p id="datosUsuario"></p>
+
+    <script>
+        function guardarUsuario() {
+            const nombre = document.getElementById('nombre').value;
+            const edad = document.getElementById('edad').value;
+            const email = document.getElementById('email').value;
+
+            const usuario = {
+                nombre: nombre,
+                edad: edad,
+                email: email
+            };
+
+            // Convertir el objeto a una cadena JSON y guardarlo en localStorage
+            localStorage.setItem('usuario', JSON.stringify(usuario));
+            alert('Usuario guardado');
+        }
+
+        function cargarUsuario() {
+            // Recuperar el objeto JSON desde localStorage y convertirlo a un objeto JavaScript
+            const usuarioGuardado = localStorage.getItem('usuario');
+            if (usuarioGuardado) {
+                const usuario = JSON.parse(usuarioGuardado);
+                document.getElementById('datosUsuario').textContent = `Nombre: ${usuario.nombre}, Edad: ${usuario.edad}, Email: ${usuario.email}`;
+            } else {
+                alert('No hay datos de usuario guardados');
+            }
+        }
+
+        function eliminarUsuario() {
+            // Eliminar el objeto del usuario de localStorage
+            localStorage.removeItem('usuario');
+            document.getElementById('datosUsuario').textContent = '';
+            alert('Usuario eliminado');
+        }
+    </script>
+</body>
+</html>

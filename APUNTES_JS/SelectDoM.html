@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Opción de Select</title>
+</head>
+<body>
+    <h1>Eliminar Opción de Select por ID</h1>
+    <div id="selectContainer"></div>
+    <button onclick="eliminarOpcion('opcion2')">Eliminar Opción 2</button>
+
+    <script>
+        // Crear el elemento <select>
+        const select = document.createElement('select');
+        select.id = 'miSelect';
+
+        // Opciones del select
+        const opciones = [
+            { valor: 'opcion1', texto: 'Opción 1', id: 'opcion1' },
+            { valor: 'opcion2', texto: 'Opción 2', id: 'opcion2' },
+            { valor: 'opcion3', texto: 'Opción 3', id: 'opcion3' },
+            { valor: 'opcion4', texto: 'Opción 4', id: 'opcion4' }
+        ];
+
+        // Crear y añadir las opciones al select
+        opciones.forEach(opcion => {
+            const option = document.createElement('option');
+            option.value = opcion.valor;
+            option.textContent = opcion.texto;
+            option.id = opcion.id;
+            select.appendChild(option);
+        });
+
+        // Añadir el select al contenedor
+        const contenedor = document.getElementById('selectContainer');
+        contenedor.appendChild(select);
+
+        // Función para eliminar una opción por id
+        function eliminarOpcion(id) {
+            const opcionAEliminar = document.getElementById(id);
+            if (opcionAEliminar) {
+                opcionAEliminar.remove();
+                alert(`Opción con id "${id}" eliminada.`);
+            } else {
+                alert(`Opción con id "${id}" no encontrada.`);
+            }
+        }
+
+
+         // Crear el elemento <select> dinámicamente
+            const select = document.createElement('select');
+        select.id = 'miSelect';
+
+        // Añadir el select al contenedor en el DOM
+        document.getElementById('selectContainer').appendChild(select);
+
+        // Función para agregar opciones al select
+        function agregarOpcion() {
+            const nuevaOpcion = document.createElement('option');
+            nuevaOpcion.value = `opcion${select.options.length + 1}`;
+            nuevaOpcion.textContent = `Opción ${select.options.length + 1}`;
+            select.appendChild(nuevaOpcion);
+        }
+
+        // Función para eliminar la última opción del select
+        function eliminarUltimaOpcion() {
+            if (select.options.length > 0) {
+                select.removeChild(select.options[select.options.length - 1]);
+            } else {
+                alert('No hay más opciones para eliminar.');
+            }
+        }
+
+        // Función para eliminar el elemento select
+        function eliminarElementoSelect() {
+            select.remove();
+        }
+
+        // Función para eliminar un párrafo del DOM
+        function eliminarParrafo() {
+            const parrafo = document.getElementById('parrafoParaEliminar');
+            if (parrafo) {
+                parrafo.remove();
+            } else {
+                alert('El párrafo ya ha sido eliminado.');
+            }
+        }
+    </script>
+</body>
+</html>

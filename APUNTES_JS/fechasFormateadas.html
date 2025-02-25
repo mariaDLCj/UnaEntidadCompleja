@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const fecha = new Date();
+
+        const fechaFormateada1 = fecha.toLocaleDateString('es-ES', {
+            weekday: 'long', // Día de la semana
+            year: 'numeric', // Año completo
+            month: 'long', // Nombre completo del mes
+            day: 'numeric', // Día del mes
+        });
+
+        console.log(fechaFormateada1);
+
+        const formateador = new Intl.DateTimeFormat('es-ES', {
+            year: 'numeric',
+            month: '2-digit',  // Puedes usar 'long', 'short', 'numeric', '2-digit'
+            day: '2-digit',    // También puede ser 'numeric' o '2-digit'
+        });
+
+        console.log(formateador.format(fecha)); // Ejemplo: "22/01/2025"
+
+
+        const dia = String(fecha.getDate()).padStart(2, '0'); // Asegurarse de que tenga dos dígitos
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+        const anio = fecha.getFullYear();
+
+        const fechaFormateada = `${dia}-${mes}-${anio}`;
+
+        console.log(fechaFormateada); // Ejemplo: "22-01-2025"
+    </script>
+</body>
+
+</html>

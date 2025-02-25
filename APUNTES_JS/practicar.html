@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Practicar contador hacia adelante con manejo del DOM -->
+    <script>
+        let p = document.createElement("p");
+        p.id = "parrafo";
+        let contador = 0;
+        let minutos = 0;
+        let horas = 0;
+
+        function contarSegundos(cont) {
+            cont++;
+            return cont;
+        }
+
+        setInterval(() => {
+            contador = contarSegundos(contador);
+            if (contador >= 60) {
+                contador = 0;
+                minutos++;
+            }
+            if (minutos >= 60) {
+                minutos = 0;
+                horas++;
+            }
+            p.innerText = `Horas: ${horas} Minutos: ${minutos} Segundos: ${contador}`;
+        }, 1000);
+
+        function limpiarTabla(){
+            let tabla = document.getElementById("tabla");
+            if(tabla){
+                tabla.remove();
+            }
+        }
+
+        document.body.appendChild(p);
+
+        // FETCH CONSUMIR API POKEMON
+
+        let url = "https://pokeapi.co/api/v2/pokemon/";
+        async function cargarPokemon(pokemon) {
+            try {
+                let response = await fetch(`${url}${pokemon}`);
+                if (!response.ok) {
+                    throw new Error("Error al cargar el Pokémon");
+                }
+                let datos = await response.json();
+                limpiarTabla();
+                let tabla = document.createElement("table");
+                tabla.id="tabla";
+                let filaTh = document.createElement("tr");
+                let tituloNombre = document.createElement("th");
+                let tituloElemento = document.createElement("th");
+                tituloNombre.textContent = "Pokémon";
+                tituloElemento.textContent = "Habilidad";
+                filaTh.append(tituloNombre, tituloElemento);
+                tabla.appendChild(filaTh);
+
+                let habilidades = datos.abilities;
+                // Ordenar alfabéticamente por el nombre de la habilidad
+                habilidades.sort((a, b) => a.ability.name.localeCompare(b.ability.name));
+                habilidades.forEach(habilidad => {
+                    let filaHabilidad = document.createElement("tr");
+                    let nombrePokemon = document.createElement("td");
+                    let nombreHabilidad = document.createElement("td");
+                    nombrePokemon.textContent = datos.name;
+                    nombreHabilidad.textContent = habilidad.ability.name;
+                    filaHabilidad.append(nombrePokemon, nombreHabilidad);
+                    tabla.appendChild(filaHabilidad);
+                });
+                document.body.appendChild(tabla);
+            } catch (e) {
+                console.error("Error al cargar Pokémon:", e);
+            }
+        }
+
+
+        async function cargarTodosPokemons() {
+            try {
+                let response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error("Error al cargar los Pokemons");
+                }
+                let dato = await response.json();
+                let pokemons = dato.results;
+                let select = document.createElement("select");
+                pokemons.forEach(pokemon => {
+                    let opcion = document.createElement("option");
+                    opcion.value = pokemon.name;
+                    opcion.textContent = pokemon.name;
+                    opcion.id = pokemon.name;
+                    select.appendChild(opcion);
+                });
+                select.addEventListener('change',(event)=>{
+                    cargarPokemon(event.target.value);
+                })
+                document.body.appendChild(select);
+            } catch (error) {
+                console.error("Error al hacer fetch" + error)
+            }
+        }
+
+        cargarTodosPokemons();
+
+        
+
+    </script>
+</body>
+
+</html>

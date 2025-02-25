@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detectar Tecla</title>
+</head>
+<body>
+    <h1>Presiona una tecla</h1>
+    <p id="keyInfo"></p>
+    <h1>Presiona Ctrl + S para guardar</h1>
+    <script>
+        document.addEventListener('keydown', (event) => {
+            let keyInfo = document.getElementById('keyInfo');
+            keyInfo.textContent = `Tecla presionada: ${event.key} (Código: ${event.keyCode})`;
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault();
+                alert('Combinación de teclas detectada: Ctrl + S');
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            const keyInfo = document.getElementById('keyInfo');
+            keyInfo.textContent = `Tecla soltada: ${event.key} (Código: ${event.keyCode})`;
+        });
+    </script>
+</body>
+</html>

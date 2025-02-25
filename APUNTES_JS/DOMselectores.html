@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Añadir Elementos por Tag</title>
+</head>
+<body>
+    <div>Este es un div</div>
+    <ul>
+        <li>Elemento original</li>
+    </ul>
+    <section>
+        <h2>Sección única</h2>
+    </section>
+
+    <script>
+        // Añadir a todos los <div>
+        const divs = document.getElementsByTagName('div');
+        for (let i = 0; i < divs.length; i++) {
+            const nuevoElemento = document.createElement('p');
+            nuevoElemento.textContent = 'Añadido a <div>';
+            divs[i].appendChild(nuevoElemento);
+        }
+
+        // Añadir a todos los <ul>
+        const listas = document.getElementsByTagName('ul');
+        for (let i = 0; i < listas.length; i++) {
+            const nuevoElemento = document.createElement('li');
+            nuevoElemento.textContent = 'Añadido a <ul>';
+            listas[i].appendChild(nuevoElemento);
+        }
+
+        // Añadir a todas las <section>
+        const secciones = document.querySelectorAll('section');
+        secciones.forEach(section => {
+            const nuevoParrafo = document.createElement('p');
+            nuevoParrafo.textContent = 'Añadido a <section>';
+            section.appendChild(nuevoParrafo);
+        });
+    </script>
+</body>
+</html>

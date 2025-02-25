@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Búsqueda en Tiempo Real</title>
+</head>
+
+<body>
+    <h1>Búsqueda en Tiempo Real</h1>
+    <input type="text" id="search" placeholder="Buscar...">
+    <ul id="list">
+        <li>Manzana</li>
+        <li>Banana</li>
+        <li>Cereza</li>
+        <li>Durazno</li>
+        <li>Fresa</li>
+    </ul>
+
+    <input type="text" id="changeField" placeholder="Escribe algo...">
+    <p id="changeOutput"></p>
+
+
+    <script>
+        const searchInput = document.getElementById('search');
+        const listItems = document.querySelectorAll('#list li');
+
+        searchInput.addEventListener('input', () => {
+            const filter = searchInput.value.toLowerCase();
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+
+        //SI LA BUSQUEDA FUERA A PARTIR DE LA 3 LETRA
+
+        searchInput.addEventListener('input', () => {
+            const filter = searchInput.value.toLowerCase();
+
+            // Filtrar solo si hay al menos 3 letras
+            if (filter.length >= 3) {
+                listItems.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(filter) ? '' : 'none';
+                });
+            } else {
+                // Mostrar todos los elementos si hay menos de 3 letras
+                listItems.forEach(item => {
+                    item.style.display = '';
+                });
+            }
+        });
+
+        //CON EL ONCHANGE
+        const changeField = document.getElementById('changeField');
+        const changeOutput = document.getElementById('changeOutput');
+
+        changeField.addEventListener('change', () => {
+            changeOutput.textContent = changeField.value;
+        });
+
+        
+    </script>
+</body>
+
+</html>

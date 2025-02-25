@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Drag and Drop: Ejemplos Combinados</title>
+    <style>
+        .draggable {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            cursor: move;
+        }
+        .dropzone {
+            width: 300px;
+            height: 300px;
+            background-color: lightgray;
+            display: flex;
+            flex-wrap: wrap;
+            border: 2px dashed #000;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+        #draggable1 { background-color: lightblue; }
+        #draggable2 { background-color: lightcoral; }
+        #draggable3 { background-color: lightgreen; }
+    </style>
+</head>
+<body>
+    <h1>Drag and Drop: Ejemplos Combinados</h1>
+
+    <!-- Primer ejemplo: Arrastrar y soltar un solo elemento -->
+    <div id="draggable1" class="draggable" draggable="true">Arrástrame</div>
+    <div id="dropzone1" class="dropzone">Suelta aquí</div>
+
+    <!-- Segundo ejemplo: Arrastrar y soltar múltiples elementos -->
+    <div id="draggable2" class="draggable" draggable="true">Elemento 2</div>
+    <div id="draggable3" class="draggable" draggable="true">Elemento 3</div>
+    <div id="dropzone2" class="dropzone"></div>
+
+    <!-- Tercer ejemplo: Cambiar el estilo de la zona de drop durante el arrastre -->
+    <div id="dropzone3" class="dropzone">Suelta aquí</div>
+
+    <script>
+        // Función para manejar el evento dragstart
+        function handleDragStart(event) {
+            event.dataTransfer.setData('text', event.target.id);
+        }
+
+        // Función para permitir el drop
+        function handleDragOver(event) {
+            event.preventDefault();
+        }
+
+        // Función para manejar el drop
+        function handleDrop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData('text');
+            const draggableElement = document.getElementById(data);
+            event.target.appendChild(draggableElement);
+        }
+
+        // Función para manejar el dragover con estilo
+        function handleDragOverWithHighlight(event) {
+            event.preventDefault();
+            event.target.classList.add('highlight');
+        }
+
+        // Función para manejar el dragleave y quitar el estilo
+        function handleDragLeave(event) {
+            event.target.classList.remove('highlight');
+        }
+
+        // Elementos drag and drop
+        const draggables = document.querySelectorAll('.draggable');
+        const dropzones = document.querySelectorAll('.dropzone');
+
+        // Añadir eventos dragstart a todos los elementos draggable
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', handleDragStart);
+        });
+
+        // Añadir eventos dragover y drop a todas las dropzones
+        dropzones.forEach(dropzone => {
+            dropzone.addEventListener('dragover', handleDragOver);
+            dropzone.addEventListener('drop', handleDrop);
+        });
+
+        // Añadir eventos específicos para el tercer ejemplo de estilo
+        const dropzone3 = document.getElementById('dropzone3');
+        dropzone3.addEventListener('dragover', handleDragOverWithHighlight);
+        dropzone3.addEventListener('dragleave', handleDragLeave);
+        dropzone3.addEventListener('drop', (event) => {
+            handleDrop(event);
+            dropzone3.classList.remove('highlight');
+        });
+    </script>
+</body>
+</html>

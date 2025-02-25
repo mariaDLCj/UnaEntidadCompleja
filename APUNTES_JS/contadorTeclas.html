@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador con Control</title>
+    <style>
+        #controlContador {
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .contador {
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Contador con Control (Pausar, Reanudar, Reiniciar)</h1>
+    <p>Contador con botones para controlar el tiempo:</p>
+
+    <div id="controlContador">
+        <div class="contador" id="contador">0 segundos</div>
+        <button id="pausarBtn">Pausar</button>
+        <button id="reanudarBtn">Reanudar</button>
+        <button id="reiniciarBtn">Reiniciar</button>
+    </div>
+
+    <script>
+        const divPadre = document.getElementById("controlContador");
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("placeholder", "Introduzca una fecha futura");
+
+        const botonFecha = document.createElement("button");
+        botonFecha.setAttribute("id", "establecerFecha");
+        botonFecha.innerText = "Nueva Fecha";
+        divPadre.append(input, botonFecha);
+
+        let fechaEvento = null; // Variable para almacenar la fecha
+
+        botonFecha.addEventListener('click', () => {
+            let valor = input.value;
+            let valorFecha = new Date(valor + "T00:00:00"); // Agregar la hora para que sea una fecha válida
+            if (!isNaN(valorFecha.getTime())) {
+                alert("Fecha Válida");
+                fechaEvento = valorFecha; // Guardar la fecha solo en la variable
+                document.getElementById('contador').textContent = "Contando hacia adelante desde: " + fechaEvento.toISOString();
+                if (intervalo) clearInterval(intervalo); // Detener cualquier contador anterior
+                intervalo = setInterval(actualizarContador, 1000); // Iniciar el contador
+            } else {
+                alert("Fecha NO válida");
+            }
+        });
+
+        let tiempo = 0;
+        let contadorActivo = true;
+        let intervalo;
+
+        function actualizarContador() {
+            if (fechaEvento === null) return; // Si no se ha establecido una fecha, no hacer nada
+            const ahora = new Date(); // Fecha actual
+
+            // Compara las fechas
+            if (fechaEvento < ahora) {
+                console.log("El evento ya ha pasado.");
+                document.getElementById('contador').textContent = "El evento ya ha pasado";
+            } else if (fechaEvento > ahora) {
+                if (contadorActivo) {
+                    tiempo++;
+                    document.getElementById('contador').textContent = `${tiempo} segundos`;
+                }
+                console.log("El evento aún no ha ocurrido.");
+            } else {
+                console.log("El evento es hoy.");
+                document.getElementById('contador').textContent = "El evento es hoy";
+            }
+        }
+
+        document.getElementById('pausarBtn').addEventListener('click', () => {
+            contadorActivo = false;
+        });
+
+        document.getElementById('reanudarBtn').addEventListener('click', () => {
+            contadorActivo = true;
+        });
+
+        document.getElementById('reiniciarBtn').addEventListener('click', () => {
+            tiempo = 0;
+            document.getElementById('contador').textContent = `${tiempo} segundos`;
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guardar Preferencias</title>
+</head>
+<body>
+    <label for="theme">Tema:</label>
+    <select id="theme">
+        <option value="light">Claro</option>
+        <option value="dark">Oscuro</option>
+    </select>
+    <button onclick="guardarPreferencias()">Guardar Preferencias</button>
+    <button onclick="cargarPreferencias()">Cargar Preferencias</button>
+
+    <script>
+        function guardarPreferencias() {
+            const temaSeleccionado = document.getElementById('theme').value;
+            localStorage.setItem('theme', temaSeleccionado);
+            alert('Preferencias guardadas');
+        }
+
+        function cargarPreferencias() {
+            const temaGuardado = localStorage.getItem('theme');
+            if (temaGuardado) {
+                document.getElementById('theme').value = temaGuardado;
+                alert('Preferencias cargadas: ' + temaGuardado);
+            } else {
+                alert('No hay preferencias guardadas');
+            }
+        }
+    </script>
+</body>
+</html>

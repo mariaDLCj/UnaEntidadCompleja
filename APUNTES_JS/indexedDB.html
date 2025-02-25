@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Guía Completa de IndexedDB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+
+        #output {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Guía Completa de IndexedDB</h1>
+
+    <h2>Introducción</h2>
+    <p>IndexedDB es una API de JavaScript para almacenar grandes cantidades de datos estructurados en el navegador del
+        usuario. Permite realizar operaciones de tipo CRUD (Crear, Leer, Actualizar, Eliminar) de manera eficiente.</p>
+
+    <h2>Inicializar la Base de Datos</h2>
+    <pre>
+<code>
+const request = indexedDB.open('MiBaseDeDatos', 1);
+
+request.onerror = (event) => {
+    console.error('Error al abrir la base de datos:', event.target.errorCode);
+};
+
+request.onsuccess = (event) => {
+    const db = event.target.result;
+    console.log('Base de datos abierta con éxito:', db);
+};
+
+request.onupgradeneeded = (event) => {
+    const db = event.target.result;
+    const objectStore = db.createObjectStore('MiObjectStore', { keyPath: 'id', autoIncrement: true });
+    objectStore.createIndex('nombre', 'nombre', { unique: false });
+    console.log('ObjectStore creado con éxito');
+};
+</code>
+    </pre>
+
+    <h2>Agregar Datos</h2>
+    <pre>
+<code>
+function agregarDato(nombre, edad) {
+    const request = indexedDB.open('MiBaseDeDatos', 1);
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction('MiObjectStore', 'readwrite');
+        const objectStore = transaction.objectStore('MiObjectStore');
+        const addRequest = objectStore.add({ nombre: nombre, edad: edad });
+        addRequest.onsuccess = () => {
+            console.log('Dato agregado con éxito');
+        };
+    };
+}
+agregarDato('Juan', 30);
+</code>
+    </pre>
+
+    <h2>Leer Datos</h2>
+    <pre>
+<code>
+function leerDatos() {
+    const request = indexedDB.open('MiBaseDeDatos', 1);
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction('MiObjectStore', 'readonly');
+        const objectStore = transaction.objectStore('MiObjectStore');
+        const getAllRequest = objectStore.getAll();
+        getAllRequest.onsuccess = () => {
+            console.log('Datos leídos:', getAllRequest.result);
+        };
+    };
+}
+leerDatos();
+</code>
+    </pre>
+
+    <h2>Actualizar Datos</h2>
+    <pre>
+<code>
+function actualizarDato(id, nuevoNombre, nuevaEdad) {
+    const request = indexedDB.open('MiBaseDeDatos', 1);
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction('MiObjectStore', 'readwrite');
+        const objectStore = transaction.objectStore('MiObjectStore');
+        const getRequest = objectStore.get(id);
+        getRequest.onsuccess = () => {
+            const data = getRequest.result;
+            data.nombre = nuevoNombre;
+            data.edad = nuevaEdad;
+            const putRequest = objectStore.put(data);
+            putRequest.onsuccess = () => {
+                console.log('Dato actualizado con éxito');
+            };
+        };
+    };
+}
+actualizarDato(1, 'Pedro', 35);
+</code>
+    </pre>
+
+    <h2>Eliminar Datos</h2>
+    <pre>
+<code>
+function eliminarDato(id) {
+    const request = indexedDB.open('MiBaseDeDatos', 1);
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction('MiObjectStore', 'readwrite');
+        const objectStore = transaction.objectStore('MiObjectStore');
+        const deleteRequest = objectStore.delete(id);
+        deleteRequest.onsuccess = () => {
+            console.log('Dato eliminado con éxito');
+        };
+    };
+}
+eliminarDato(1);
+</code>
+    </pre>
+
+    <h2>Mostrar Resultados en el DOM</h2>
+    <p>Abre la consola de tu navegador para ver los resultados de las operaciones de IndexedDB.</p>
+    <div id="output"></div>
+
+    <script>
+        // Inicializar base de datos y agregar algunos datos de ejemplo
+        const request = indexedDB.open('MiBaseDeDatos', 1);
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            const objectStore = db.createObjectStore('MiObjectStore', { keyPath: 'id', autoIncrement: true });
+            objectStore.createIndex('nombre', 'nombre', { unique: false });
+        };
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction('MiObjectStore', 'readwrite');
+            const objectStore = transaction.objectStore('MiObjectStore');
+            objectStore.add({ nombre: 'Juan', edad: 30 });
+            objectStore.add({ nombre: 'Ana', edad: 25 });
+            objectStore.add({ nombre: 'Pedro', edad: 35 });
+        };
+
+        // Mostrar resultados en el DOM
+        function mostrarDatos() {
+            const output = document.getElementById('output');
+            const request = indexedDB.open('MiBaseDeDatos', 1);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction('MiObjectStore', 'readonly');
+                const objectStore = transaction.objectStore('MiObjectStore');
+                const getAllRequest = objectStore.getAll();
+                getAllRequest.onsuccess = () => {
+                    output.innerHTML = '<h2>Datos en IndexedDB:</h2><pre>' + JSON.stringify(getAllRequest.result, null, 2) + '</pre>';
+                };
+            };
+        }
+
+        mostrarDatos();
+    </script>
+
+</body>
+
+</html>

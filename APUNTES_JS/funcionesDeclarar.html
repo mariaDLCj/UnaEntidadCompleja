@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo de funciones con parámetros</title>
+</head>
+<body>
+
+<button id="boton1">Botón 1 (Función Anónima)</button>
+<button id="boton2">Botón 2 (Función Flecha)</button>
+<button onclick="saludarInline('Carlos')">Botón 3 (Inline)</button>
+
+<script>
+    const saludar = function(nombre) {
+        alert(`Hola, ${nombre}! (Función Anónima)`);
+    };
+
+    const saludarFlecha = (nombre) => {
+        alert(`Hola, ${nombre}! (Función Flecha)`);
+    };
+
+    document.getElementById("boton1").addEventListener("click", function() {
+        saludar("Juan");
+    });
+
+    document.getElementById("boton2").addEventListener("click", () => {
+        saludarFlecha("Ana");
+    });
+
+    function saludarInline(nombre) {
+        alert(`Hola, ${nombre}! (Inline)`);
+    }
+</script>
+
+</body>
+</html>

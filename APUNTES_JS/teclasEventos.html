@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detectar Teclas Especiales</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Presiona una tecla especial</h1>
+    <p id="output"></p>
+
+    <script>
+        const output = document.getElementById('output');
+
+        document.addEventListener('keydown', (event) => {
+            switch (event.key) {
+                case ' ':
+                    output.textContent = 'Se presionó la tecla Espacio';
+                    break;
+                case 'Enter':
+                    output.textContent = 'Se presionó la tecla Enter';
+                    break;
+                case 'Escape':
+                    output.textContent = 'Se presionó la tecla Escape';
+                    break;
+                case 'ArrowUp':
+                    output.textContent = 'Se presionó la tecla Flecha Arriba';
+                    break;
+                case 'ArrowDown':
+                    output.textContent = 'Se presionó la tecla Flecha Abajo';
+                    break;
+                case 'ArrowLeft':
+                    output.textContent = 'Se presionó la tecla Flecha Izquierda';
+                    break;
+                case 'ArrowRight':
+                    output.textContent = 'Se presionó la tecla Flecha Derecha';
+                    break;
+                case 'Control':
+                    output.textContent = 'Se presionó la tecla Control';
+                    break;
+                case 'Alt':
+                    output.textContent = 'Se presionó la tecla Alt';
+                    break;
+                case 'Shift':
+                    output.textContent = 'Se presionó la tecla Shift';
+                    break;
+                default:
+                    output.textContent = `Tecla presionada: ${event.key}`;
+            }
+        });
+    </script>
+
+    <h2>Lista de Eventos de Teclas Comunes</h2>
+    <ul>
+        <li><strong>keydown</strong>: Se activa cuando se presiona una tecla.</li>
+        <li><strong>keyup</strong>: Se activa cuando se suelta una tecla.</li>
+        <li><strong>keypress</strong>: Se activa cuando se presiona una tecla que produce un valor, como una letra o un número. (Nota: `keypress` está en desuso en muchos casos en favor de `keydown` y `keyup`).</li>
+    </ul>
+</body>
+</html>

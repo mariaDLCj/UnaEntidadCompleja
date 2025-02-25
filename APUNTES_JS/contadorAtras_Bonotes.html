@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador con Control</title>
+    <style>
+        #controlContador {
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .contador {
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Contador con Control (Pausar, Reanudar, Reiniciar)</h1>
+    <p>Contador con botones para controlar el tiempo:</p>
+
+    <div id="controlContador">
+        <div class="contador" id="contador">0 segundos</div>
+        <button id="pausarBtn">Pausar</button>
+        <button id="reanudarBtn">Reanudar</button>
+        <button id="reiniciarBtn">Reiniciar</button>
+    </div>
+
+    <script>
+        const divPadre = document.getElementById("controlContador");
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("placeholder", "Introduzca una fecha y hora futura (ej. 2025-03-23T15:00)");
+
+        const botonFecha = document.createElement("button");
+        botonFecha.setAttribute("id", "establecerFecha");
+        botonFecha.innerText = "Nueva Fecha";
+        divPadre.append(input, botonFecha);
+
+        let fechaEvento = null; // Variable para almacenar la fecha
+
+        botonFecha.addEventListener('click', () => {
+            let valor = input.value;
+            // Validar si la fecha tiene un formato correcto: YYYY-MM-DDTHH:MM
+            let valorFecha = new Date(valor);
+
+            // Verifica si la fecha y hora son válidas
+            if (!isNaN(valorFecha.getTime())) {
+                alert("Fecha Válida");
+                fechaEvento = valorFecha; // Guardar la fecha solo en la variable
+                document.getElementById('contador').textContent = "Contando hacia adelante desde: " + fechaEvento.toISOString();
+                if (intervalo) clearInterval(intervalo); // Detener cualquier contador anterior
+                intervalo = setInterval(actualizarContador, 1000); // Iniciar el contador
+            } else {
+                alert("Fecha o formato NO válido. Usa el formato correcto: YYYY-MM-DDTHH:MM");
+            }
+        });
+
+        let tiempo = 0;
+        let contadorActivo = true;
+        let intervalo;
+
+        function actualizarContador() {
+            if (fechaEvento === null) return; // Si no se ha establecido una fecha, no hacer nada
+            const ahora = new Date(); // Fecha actual
+            const diferencia = fechaEvento - ahora; // Diferencia entre la fecha del evento y la fecha actual
+
+            // Si la diferencia es menor a 0, el evento ya pasó
+            if (diferencia < 0) {
+                console.log("El evento ya ha pasado.");
+                document.getElementById('contador').textContent = "El evento ya ha pasado";
+            } else {
+                if (contadorActivo) {
+                    tiempo++;
+                }
+
+                const segundos = Math.floor(diferencia / 1000) % 60;
+                const minutos = Math.floor(diferencia / (1000 * 60)) % 60;
+                const horas = Math.floor(diferencia / (1000 * 60 * 60)) % 24;
+                const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+
+                // Muestra el tiempo transcurrido en segundos, minutos y días
+                document.getElementById('contador').textContent = `${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos`;
+            }
+        }
+
+        document.getElementById('pausarBtn').addEventListener('click', () => {
+            contadorActivo = false;
+        });
+
+        document.getElementById('reanudarBtn').addEventListener('click', () => {
+            contadorActivo = true;
+        });
+
+        document.getElementById('reiniciarBtn').addEventListener('click', () => {
+            tiempo = 0;
+            document.getElementById('contador').textContent = `${tiempo} segundos`;
+        });
+
+    </script>
+
+</body>
+
+</html>

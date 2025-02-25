@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Abrir y Cerrar Ventanas</title>
+</head>
+
+<body>
+    <h1>Manejo de Ventanas</h1>
+    <button onclick="abrirVentana()">Abrir Nueva Ventana</button>
+    <button onclick="cerrarVentana()">Cerrar Ventana</button>
+
+    <script>
+        let nuevaVentana;
+
+        function abrirVentana() {
+            //NUEVA HTML TIENE QUE SER UN ARCHIVO REAL
+            nuevaVentana = window.open('nueva.html', '_blank', 'width=600,height=400');
+        }
+
+        function cerrarVentana() {
+            if (nuevaVentana) {
+                nuevaVentana.close();
+            } else {
+                alert('No hay ninguna ventana abierta.');
+            }
+        }
+
+        function recibirMensaje(mensaje) {
+            alert('Mensaje recibido: ' + mensaje);
+        }
+
+        window.recibirMensaje = recibirMensaje;
+    </script>
+</body>
+
+</html>
